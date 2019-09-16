@@ -2,7 +2,6 @@
 
 linha="+----------------------------+"
 echo $linha
-#echo "|   SHELLZINHA PARA JUNIOR   |"
 echo "|     CADASTRO EMPREGO       |
 echo "|   1 - Cadastrar            |"
 echo $linha ; read cod_ini
