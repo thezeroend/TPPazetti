@@ -1,80 +1,169 @@
 #!/bin/bash
 
-linha="+----------------------------+"
-echo $linha
-echo "|     CADASTRO EMPREGO       |
-echo "|   1 - Cadastrar            |"
-echo $linha ; read cod_ini
+principal(){
+  #Salva a linha utilizada para layout
+  linha="+----------------------------+"
 
-#Verifica se o codigo foi 1
-if [ $cod_ini = "1" ]
-then
+  #Menu inicial
+  echo $linha
+  echo "|   CADASTRO DE EMPREGO      |"
+  echo "|   1 - Cadastrar            |"
+  echo $linha ; read cod_ini
+
+  #Se o código inicial for diferente de 1 ele retorna ao começo.
+  while [ $cod_ini != 1 ];do
+      echo "Tente novamente digitando o código correto"
+      sleep 2
+      clear
+      principal
+  done
+
   #limpa a tela
-   clear
+  clear
 
   #Fala pra ser digitado corretamente os valores
-   echo $linha
-   echo "|   Entre com os valores     |"
-   echo "|   corretos para Cadastro   |"
-   echo $linha
+  echo $linha
+  echo "|   Entre com os valores     |"
+  echo "|   corretos para Cadastro   |"
+  echo $linha
 
-   #Exibição do questionario
-   echo "Nome Completo:" ; read nome
-   echo "Sexo (M ou F):" ; read sexo
+  #Chama a função nome
+  nome
+  
+  #Chama a função sexo
+   sexo
 
-   #Deixa todas as letras da variavel sexo maiuscula
-   sexo=${sexo^^}
+  #Chama a função pretensao
+  pretensao
 
-   #Verifica se o valor foi "M" ou "F"
-   if [ $sexo = "M" -o $sexo = "F" ]
-   then
-      #Continua o Programa
-      echo "Pretensão Salarial (Ex.: 1300):" ; read salario
-      echo "Idade:" ; read idade
-      echo "+----------------------------+"
-      echo "|      Lista de Códigos      |"
-      echo "|    1 - Cartógrafo          |"
-      echo "|    2 - Assistente Social   |"
-      echo "|    3 - Psicologo           |"
-      echo "|    4 - Atendente           |"
-      echo "|    5 - Secretária Bilingue |"
-      echo "|    6 - Geólogo             |"
-      echo "+----------------------------+"
-      echo ""
-      echo "Código da função desejada:" ; read cod_func
+  #Chama a função idade
+  idade
 
-      #Case para o codigo da função
-      case $cod_func in
-        1) nome_func="Cartógrafo";;
-        2) nome_func="Assistente Social";;
-        3) nome_func="Psicologo";;
-        4) nome_func="Atendente";;
-        5) nome_func="Secretária Bilingue";;
-        6) nome_func="Geólogo";;
-        *) cod_func="0";;
-      esac
-      
-      #Se o codigo da funcão for diferente de 1 á 6 ele mostra
-      #A mensagem a seguir
-      if [ $cod_func = "0" ]
-      then
-        echo "Código selecionado indisponivel"
-        echo "Tente novamente mais tarde."
-      else
-      #Limpa a tela e exibe o resultado final
-        clear
-        echo $linha
-        echo "|       Cadastro Efetuado    |"
-        echo $linha
-        echo "Nome: $nome"
-        echo "Função: $nome_func"
-        echo -n 'Data:' ; date '+%d/%m/%Y'  
-        echo $linha
-      fi
-    else
-      echo "Erro ao inserir o valor de Sexo, inserir M ou F."
-      echo "Finalizando shell"
+  #Exibe tabela de códigos
+  echo $linha
+  echo "|      Lista de Códigos      |"
+  echo "|    1 - Cartógrafo          |"
+  echo "|    2 - Assistente Social   |"
+  echo "|    3 - Psicologo           |"
+  echo "|    4 - Atendente           |"
+  echo "|    5 - Secretária Bilingue |"
+  echo "|    6 - Geólogo             |"
+  echo $linha
+  echo ""
+
+  #Chama a função funcao
+  funcao
+    
+  #Limpa a tela e exibe o resultado final
+  clear
+  echo $linha
+  echo "|       Cadastro Efetuado    |"
+  echo $linha
+  echo "Nome: $nome"
+  echo "Função: $nome_func"
+  echo -n 'Data:' ; date '+%d/%m/%Y'  
+  echo $linha
+  
+}
+
+nome(){
+  #Exibição do questionario
+  echo -n "Nome Completo:" ; read nome
+
+  while echo  "$nome"  | egrep [[:punct:][:digit:]]  >/dev/null
+  do
+    echo "Erro ao continuar, não insira numeros ou caracteres especiais."
+    echo "Somente Letras."
+    sleep 2
+    nome
+  done
+
+}
+
+sexo(){
+  #Exibe na tela e le o valor
+  echo -n "Sexo M(Masculino) ou F(Feminino):" ; read sexo
+
+  #Deixa todas as letras da variavel sexo maiuscula
+  sexo=${sexo^}
+
+  #Verifica se o valor for diferente de M ou F ele pede pra reentrar o valor.
+  if [ $sexo != "F" ]
+  then
+    if [ $sexo != "M" ]
+    then
+      while [  $sexo != "M" ] ; do
+        echo "Erro ao continuar, entre com os valores M para masculino ou F para feminino."
+        sleep 2
+        sexo
+      done
     fi
-else
-   echo "Código inexistente"
-fi
+  else
+    while [ $sexo != "F" ] ; do
+        echo "Erro ao continuar, entre com os valores M para masculino ou F para feminino."
+        sleep 2
+        sexo
+      done
+    
+  fi
+}
+
+pretensao(){
+  echo -n "Pretensão Salarial (Ex.: 1300):" ; read salario
+  
+  #Busca dentro da variavel nome com o egrep os caracteres especiais, alfabeticos[a-z] e espaços em branco
+
+  while echo  "$salario"  | egrep [[:punct:][:alpha:][:blank:]""]  >/dev/null
+  do
+    echo "Erro ao continuar, não insira letras ou caracteres especiais."
+    echo "Somente Numeros."
+    sleep 2
+    pretensao
+  done
+}
+
+idade(){
+  echo -n "Idade:" ; read idade
+
+  while echo  "$idade"  | egrep [[:punct:][:alpha:][:blank:]]  >/dev/null
+  do
+    echo "Erro ao continuar, não insira letras ou caracteres especiais."
+    echo "Somente Numeros."
+    sleep 2
+    pretensao
+  done
+  
+  if [ $idade -lt "18" ]
+  then
+    echo "A idade minima para se candidatar é 18 anos"
+    echo "Encerrando cadastro."
+    clear
+    principal
+  fi
+}
+
+funcao(){
+
+    echo -n "Código da função desejada:" ; read cod_func
+
+    #Case para o codigo da função
+    case $cod_func in
+    1) nome_func="Cartógrafo";;
+    2) nome_func="Assistente Social";;
+    3) nome_func="Psicologo";;
+    4) nome_func="Atendente";;
+    5) nome_func="Secretária Bilingue";;
+    6) nome_func="Geólogo";;
+    *) cod_func="0";;
+    esac
+        
+    while [ $cod_func -lt "1" ] ; do
+      echo "Erro ao continuar, selecione um código existente."
+      sleep 2
+      funcao
+    done
+
+}
+
+
+principal
