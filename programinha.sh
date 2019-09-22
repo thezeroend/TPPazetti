@@ -1,6 +1,9 @@
 #!/bin/bash
 
 principal(){
+  #Limpa a tela antes de começar
+  clear
+
   #Salva a linha utilizada para layout
   linha="+----------------------------+"
 
@@ -31,7 +34,7 @@ principal(){
   nome
   
   #Chama a função sexo
-   sexo
+  sexo
 
   #Chama a função pretensao
   pretensao
@@ -59,7 +62,7 @@ principal(){
   echo $linha
   echo "|       Cadastro Efetuado    |"
   echo $linha
-  echo "Nome: $nome"
+  echo "Nome: ${nome^}"
   echo "Função: $nome_func"
   echo -n 'Data:' ; date '+%d/%m/%Y'  
   echo $linha
@@ -70,7 +73,16 @@ nome(){
   #Exibição do questionario
   echo -n "Nome Completo:" ; read nome
 
-  while echo  "$nome"  | egrep [[:punct:][:digit:]]  >/dev/null
+  #Se a qntd de letras for menor que 3 entra no while
+  while [ ${#nome} -lt 2 ] ;
+  do
+    echo "Erro ao continuar, insira um nome valido."
+    sleep 2
+    nome
+  done
+
+  #Verifica se na variavel contem caracteres especiais ou digitos
+  while echo "$nome" | egrep [[:punct:][:digit:]] ;
   do
     echo "Erro ao continuar, não insira numeros ou caracteres especiais."
     echo "Somente Letras."
@@ -84,8 +96,16 @@ sexo(){
   #Exibe na tela e le o valor
   echo -n "Sexo M(Masculino) ou F(Feminino):" ; read sexo
 
-  #Deixa todas as letras da variavel sexo maiuscula
+  #Deixa a letra da variavel sexo maiuscula
   sexo=${sexo^}
+
+  #Se a qntd de letras for menor que 1 entra no while
+  while [ ${#sexo} -lt 1 ] ;
+  do
+    echo "Erro ao continuar, insira valor valido para sexo."
+    sleep 2
+    sexo
+  done
 
   #Verifica se o valor for diferente de M ou F ele pede pra reentrar o valor.
   if [ $sexo != "F" ]
@@ -109,13 +129,22 @@ sexo(){
 }
 
 pretensao(){
+  #Exibe mensagem e pede entrada do dado.
   echo -n "Pretensão Salarial (Ex.: 1300):" ; read salario
-  
+
+  #Se a qntd de letras for menor que 1 entra no while
+  while [ ${#salario} -lt 2 ] ;
+  do
+    echo "Erro ao continuar, insira valor valido para a pretensão."
+    sleep 2
+    pretensao
+  done
+
   #Busca dentro da variavel nome com o egrep os caracteres especiais, alfabeticos[a-z] e espaços em branco
 
-  while echo  "$salario"  | egrep [[:punct:][:alpha:][:blank:]""]  >/dev/null
+  while echo "$salario" | egrep [[:punct:][:alpha:][:blank:]] ;
   do
-    echo "Erro ao continuar, não insira letras ou caracteres especiais."
+    echo "Erro ao continuar, não insira letras, pontos ou caracteres especiais."
     echo "Somente Numeros."
     sleep 2
     pretensao
@@ -123,9 +152,12 @@ pretensao(){
 }
 
 idade(){
+  #Exibe mensagem e pede entrada do dado.
   echo -n "Idade:" ; read idade
 
-  while echo  "$idade"  | egrep [[:punct:][:alpha:][:blank:]]  >/dev/null
+  #Busca dentro da variavel nome com o egrep os caracteres especiais, alfabeticos[a-z] e espaços em branco
+
+  while echo "$idade" | egrep [[:punct:][:alpha:][:blank:]] ;
   do
     echo "Erro ao continuar, não insira letras ou caracteres especiais."
     echo "Somente Numeros."
@@ -133,17 +165,27 @@ idade(){
     pretensao
   done
   
+  #Se a qntd de letras for menor que 1 entra no while
+  while [ ${#idade} -lt 1 ] ;
+  do
+    echo "Erro ao continuar, insira valor valido."
+    sleep 2
+    idade
+  done
+
+  #Se a idade for menor de 18 fala que a idade minima é 18 finaliza o cadastro.
   if [ $idade -lt "18" ]
   then
     echo "A idade minima para se candidatar é 18 anos"
     echo "Encerrando cadastro."
+    sleep 5
     clear
     principal
   fi
 }
 
 funcao(){
-
+    #Exibe mensagem e pede entrada do dado.
     echo -n "Código da função desejada:" ; read cod_func
 
     #Case para o codigo da função
