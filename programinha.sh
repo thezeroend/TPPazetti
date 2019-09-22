@@ -73,7 +73,7 @@ nome(){
   #Exibição do questionario
   echo -n "Nome Completo:" ; read nome
 
-  #Se a qntd de letras for menor que 3 entra no while
+  #Se a qntd de letras for menor que 2 entra no while
   while [ ${#nome} -lt 2 ] ;
   do
     echo "Erro ao continuar, insira um nome valido."
@@ -132,7 +132,7 @@ pretensao(){
   #Exibe mensagem e pede entrada do dado.
   echo -n "Pretensão Salarial (Ex.: 1300):" ; read salario
 
-  #Se a qntd de letras for menor que 1 entra no while
+  #Se a qntd de letras for menor que 2 entra no while
   while [ ${#salario} -lt 2 ] ;
   do
     echo "Erro ao continuar, insira valor valido para a pretensão."
